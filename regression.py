@@ -87,7 +87,8 @@ def elasic_net(X_train, X_test, y_train, y_test):
           f"Test = {r2_score(y_test, y_test_pred)}")
 
 
-linear_regression(X_train, X_test, y_train, y_test)
-ridge(X_train, X_test, y_train, y_test)
-support_vector_regression(X_train, X_test, y_train, y_test)
-elasic_net(X_train, X_test, y_train, y_test)
+if __name__ == '__main__':
+    linear_regression(X_train, X_test, y_train, y_test)
+    ridge(X_train, X_test, y_train, y_test)
+    support_vector_regression(X_train, X_test, y_train, y_test)
+    elasic_net(X_train, X_test, y_train, y_test)
