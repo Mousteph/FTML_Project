@@ -23,9 +23,11 @@ def linear_regression(X_train, X_test, y_train, y_test):
     y_train_pred = model.predict(X_train)
     y_test_pred = model.predict(X_test)
 
-    print(f"Linear Regression R2 Score: "
-          f"Train = {r2_score(y_train, y_train_pred)} | "
-          f"Test = {r2_score(y_test, y_test_pred)}")
+    print(
+        f"Linear Regression R2 Score: "
+        f"Train = {r2_score(y_train, y_train_pred)} | "
+        f"Test = {r2_score(y_test, y_test_pred)}"
+    )
 
 
 def ridge(X_train, X_test, y_train, y_test):
@@ -37,9 +39,11 @@ def ridge(X_train, X_test, y_train, y_test):
     y_train_pred = model.predict(X_train)
     y_test_pred = model.predict(X_test)
 
-    print(f"Ridge R2 Score: "
-          f"Train = {r2_score(y_train, y_train_pred)} | "
-          f"Test = {r2_score(y_test, y_test_pred)}")
+    print(
+        f"Ridge R2 Score: "
+        f"Train = {r2_score(y_train, y_train_pred)} | "
+        f"Test = {r2_score(y_test, y_test_pred)}"
+    )
 
 
 def support_vector_regression(X_train, X_test, y_train, y_test):
@@ -67,24 +71,28 @@ def support_vector_regression(X_train, X_test, y_train, y_test):
     y_train_pred = model.predict(X_train)
     y_test_pred = model.predict(X_test)
 
-    print(f"SVR R2 Score: "
-          f"Train = {r2_score(y_train, y_train_pred)} | "
-          f"Test = {r2_score(y_test, y_test_pred)}")
+    print(
+        f"SVR R2 Score: "
+        f"Train = {r2_score(y_train, y_train_pred)} | "
+        f"Test = {r2_score(y_test, y_test_pred)}"
+    )
 
 
 def elasic_net(X_train, X_test, y_train, y_test):
     l1_ratio = np.arange(0.01, 1.01, 0.01)
-    model = ElasticNetCV(l1_ratio=l1_ratio, max_iter=4000).fit(
-        X_train, y_train.flatten())
+    model = ElasticNetCV(l1_ratio=l1_ratio,
+                         max_iter=4000).fit(X_train, y_train.flatten())
 
     print("Elastic Net best l1_ratio:", model.l1_ratio_)
 
     y_train_pred = model.predict(X_train)
     y_test_pred = model.predict(X_test)
 
-    print(f"Elastic Net R2 Score: "
-          f"Train = {r2_score(y_train, y_train_pred)} | "
-          f"Test = {r2_score(y_test, y_test_pred)}")
+    print(
+        f"Elastic Net R2 Score: "
+        f"Train = {r2_score(y_train, y_train_pred)} | "
+        f"Test = {r2_score(y_test, y_test_pred)}"
+    )
 
 
 if __name__ == '__main__':
