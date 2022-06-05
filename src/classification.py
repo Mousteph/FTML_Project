@@ -16,6 +16,7 @@ from sklearn.pipeline import make_pipeline
 
 from sklearn.svm import SVC
 from sklearn.linear_model import LogisticRegression
+from sklearn.neighbors import KNeighborsClassifier
 
 
 class Classification(object):
@@ -27,18 +28,13 @@ class Classification(object):
         self.X_train, self.X_test, self.y_train, self.y_test = self._train_test_split(
         )
 
-    def logistic_regression(self):
-        model = LogisticRegression(random_state=0)
-        model.fit(self.X_train, self.y_train.ravel())
-        return model
-
     def get_perfs(self):
-        models = [self.support_vector_machine(), self.logistic_regression()]
-
+        models = self.get_models()
         accuracies = []
         for model in models:
             accuracies.append(self.run_algo(model))
 
+        print("Models Evaluation:")
         for i in range(len(accuracies)):
             # To fix : Printing the right name
             print(f'Model {type(models[i]).__name__}:')
@@ -48,13 +44,31 @@ class Classification(object):
         y_pred = model.predict(self.X_test)
         return self._test_acuracy(y_pred)
 
+    # Algorithms
+    def get_model(self, clf):
+        return clf.fit(self.X_train, self.y_train.ravel())
+
+    def get_models(self):
+        classifiers = [
+            self.logistic_regression(),
+            self.support_vector_machine(),
+            self.k_nearest_neighbours()
+        ]
+
+        models = []
+        for clf in classifiers:
+            models.append(self.get_model(clf))
+
+        return models
+
+    def logistic_regression(self):
+        return LogisticRegression(random_state=0)
+
     def support_vector_machine(self):
-        clf = make_pipeline(StandardScaler(), SVC(gamma='auto'))
-        clf.fit(self.X_train, self.y_train.ravel())
-        return clf
+        return make_pipeline(StandardScaler(), SVC(gamma='auto'))
 
     def k_nearest_neighbours(self):
-        pass
+        return KNeighborsClassifier(n_neighbors=3)
 
     def naive_bais(self):
         pass
