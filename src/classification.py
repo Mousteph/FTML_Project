@@ -8,86 +8,68 @@
 """
 
 import numpy as np
+
+from sklearn.linear_model import LogisticRegression, RidgeClassifier, Perceptron
 from sklearn.metrics import accuracy_score
-from sklearn.model_selection import train_test_split
-
-from sklearn.preprocessing import StandardScaler
-from sklearn.pipeline import make_pipeline
-
 from sklearn.svm import SVC
-from sklearn.linear_model import LogisticRegression
-from sklearn.neighbors import KNeighborsClassifier
+
+from fit_model import FitModel
 
 
-class Classification(object):
-    def __init__(self):
-        self.X = np.load("data/classification/inputs.npy")
-        self.y = np.load("data/classification/labels.npy")
+X = np.load("data/classification/inputs.npy")
+y = np.load("data/classification/labels.npy")
 
-        print(f'Shape of X: {self.X.shape}')
-        self.X_train, self.X_test, self.y_train, self.y_test = self._train_test_split(
-        )
+print(f"Shape of X: {X.shape}")
 
-    def get_perfs(self):
-        models = self.get_models()
-        accuracies = []
-        for model in models:
-            accuracies.append(self.run_algo(model))
+if __name__ == '__main__':
+    model_regression = FitModel(X, y, ("accuracy", accuracy_score))
 
-        print("Models Evaluation:")
-        for i in range(len(accuracies)):
-            # To fix : Printing the right name
-            print(f'Model {type(models[i]).__name__}:')
-            print(f'accuracy: {accuracies[i] * 100}%\n')
+    params_lr = [
+        {"penalty": ["l1", "l2"],
+         "C": np.arange(0.01, 3, 0.01),
+         "solver": ["liblinear"]},
 
-    def run_algo(self, model):
-        y_pred = model.predict(self.X_test)
-        return self._test_acuracy(y_pred)
+        {"penalty": ["l2"],
+         "C": np.arange(0.01, 3, 0.01),
+         "solver": ["sag"]},
 
-    # Algorithms
-    def get_model(self, clf):
-        return clf.fit(self.X_train, self.y_train.ravel())
+        {"penalty": ["l1", "l2"],
+         "C": np.arange(0.01, 3, 0.01),
+         "solver": ["saga"]},
 
-    def get_models(self):
-        classifiers = [
-            self.logistic_regression(),
-            self.support_vector_machine(),
-            self.k_nearest_neighbours()
-        ]
+        {"penalty": ["elasticnet"],
+         "C": np.arange(0.01, 3, 0.01),
+         "l1_ratio": np.arange(0, 1, 0.01),
+         "solver": ["saga"]},
+    ]
 
-        models = []
-        for clf in classifiers:
-            models.append(self.get_model(clf))
+    lr_pipeline = model_regression.fit_new_model(LogisticRegression(random_state=20, max_iter=2000),
+                                                 params_lr, "Logistic Regression", n_iter=10)
 
-        return models
+    params_svc = [
+        {"C": np.arange(0.01, 3, 0.01),
+         "kernel": ["linear", "poly", "rbf", "sigmoid"]}
+    ]
 
-    def logistic_regression(self):
-        return LogisticRegression(random_state=0)
+    svc_pipeline = model_regression.fit_new_model(
+        SVC(random_state=20), params_svc, "SVC")
 
-    def support_vector_machine(self):
-        return make_pipeline(StandardScaler(), SVC(gamma='auto'))
+    params_perceptron = [
+        {"penalty": ["elasticnet"],
+         "alpha": np.arange(0.001, 0.1, 0.001),
+         "l1_ratio": np.arange(0.01, 1, 0.01),
+         "eta0": np.arange(0.01, 2.5, 0.01),
+         }
+    ]
 
-    def k_nearest_neighbours(self):
-        return KNeighborsClassifier(n_neighbors=3)
+    perceptron_pipeline = model_regression.fit_new_model(Perceptron(random_state=20, n_jobs=-1), params_perceptron,
+                                                         "Perceptron", n_iter=6000)
 
-    def naive_bais(self):
-        pass
+    params_ridge = [
+        {"alpha": np.arange(0.01, 4, 0.01),
+         "solver": ["svd", "cholesky", "lsqr", "sparse_cg", "sag", "saga"],
+         }
+    ]
 
-    def decision_tree(self):
-        pass
-
-    def _train_test_split(self):
-        return train_test_split(self.X, self.y, random_state=42)
-
-    def _test_acuracy(self, y_pred):
-        # With normalisation (normalize = False)
-        y_test = self.y_test
-        return accuracy_score(y_test, y_pred)    #, normalize=False)
-
-
-if __name__ == "__main__":
-    classification = Classification()
-    # SVM = classification.support_vector_machine()
-    # LR = classification.logistic_regression()
-    # print(classification.run_algo(SVM))
-    classification.get_perfs()
+    rfc_pipeline = model_regression.fit_new_model(
+        RidgeClassifier(random_state=20), params_ridge, "Ridge Classifier")
