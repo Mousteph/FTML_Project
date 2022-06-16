@@ -36,8 +36,9 @@ for y in Y:
 # plot the result
 plt.scatter(np.arange(n), empirical_risk, s=3, label="Rn(f) empirical risk")
 plt.axhline(0.29, color="red", alpha=0.7, label="real risk / generalization error")
+plt.axhline(0.24, color="mediumvioletred", alpha=0.7, label="bayes risk")
 plt.legend(loc="best")
+plt.axis([None, None, 0, 1])
 plt.xlabel("n")
-plt.ylim([0, 1])
 plt.title("f: Empirical risk and generalization error\nR(f)=0.29")
 plt.show()
