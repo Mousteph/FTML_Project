@@ -1,6 +1,6 @@
 """
     Name:       Classification.py
-    Authors:    Théo Perinet, Moustapha Diop, Marc Monteil, Mathieu Rivier
+    Authors:    Théo Perinet, Moustapha Diop, Marc Monteil, Mathieu Rivier, Martin Poulard
     Version:    1.0
 
     This file corresponds to the 5th question of the final FTML project:
