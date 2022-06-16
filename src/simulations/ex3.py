@@ -56,4 +56,4 @@ plt.plot(n_list, [bayes_risk]*len(n_list),
          label="Bayes risk: "+r"$\sigma^2$", color="aqua")
 plt.title("Experimental estimation of $\sigma^2$")
 plt.legend(loc="best")
-
+plt.show()
