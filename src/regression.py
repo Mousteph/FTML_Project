@@ -1,3 +1,12 @@
+"""
+    Name:       Regression.py
+    Authors:    Théo Perinet, Moustapha Diop, Marc Monteil, Mathieu Rivier, Martin Poulard
+    Version:    1.0
+
+    This file corresponds to the 4th question of the final FTML project:
+    Regression
+"""
+
 import numpy as np
 
 from sklearn.linear_model import LinearRegression, Ridge, ElasticNet
